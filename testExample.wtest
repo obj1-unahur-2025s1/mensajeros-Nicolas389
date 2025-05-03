@@ -1,9 +1,60 @@
-import example.pepita
+import paquete.*
+import destinos.*
+import mensajeros.*
+import empresa.*
 
-describe "group of tests for pepita" {
+test "punto 1: roberto puede entregar un paquete pago en camion con un acoplado"{
+  
+  roberto.entregarEnCamion(1)
+  paquete.pagar()
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
-
+  assert.equals(true, brooklyn.dejarPasar(roberto))
 }
+
+test "punto 2: neo con credito no puede entregar un paquete no pago"{
+  neo.cargarCredito()
+  
+
+  assert.equals(false, matrix.dejarPasar(neo))
+}
+
+// test segunda parte
+
+test "contratar a roberto como mensajero"{
+  empresa.contratar(roberto)
+
+  assert.equals(roberto,empresa.mensajeros().asList().first())
+}
+
+test "contratar a roberto y neo y despedir a roberto"{
+  empresa.contratar(roberto)
+  empresa.contratar(neo)
+  empresa.despedir(roberto)
+
+  assert.equals(neo, empresa.mensajeros().asList().first())
+}
+
+test "contratar a roberto, neo y chuckNorris y despedir a todos"{
+  empresa.contratar(roberto)
+  empresa.contratar(neo)
+  empresa.contratar(chuckNorris)
+  empresa.despedirTodos()
+
+  assert.equals(true, empresa.mensajeros().isEmpty())
+}
+
+test "contratar a roberto y neo y consultar si el primero puede entregar un paquete en brooklyn"{
+  empresa.contratar(roberto)  
+  empresa.contratar(neo)
+  roberto.entregarEnBici()
+
+  assert.equals(true, brooklyn.dejarPasar(empresa.primerMensajeroPuedeEntregar()))
+}
+
+test "contratar a roberto y neo y consultar el peso del ultimo"{
+  empresa.contratar(roberto)  
+  empresa.contratar(neo)
+
+  assert.equals(0, empresa.pesoDelUltimoMensajero())
+}
+
